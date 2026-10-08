@@ -4,6 +4,12 @@ export type ChannelKey = 'linkedin' | 'instagram' | 'facebook' | 'youtube' | 'go
 export type PostLifecycleStatus = 'empty' | 'idle' | 'generating' | 'generated' | 'edited' | 'ready' | 'dispatched' | 'failed';
 export type ActiveTool = 'graphics' | 'gatekeeper' | null;
 
+export interface SlideContent {
+  title: string;
+  body: string;
+  badge?: string;
+}
+
 export interface VisualAsset {
   aspectRatio: '4:5' | '16:9' | '1:1' | '1.91:1' | '4:3';
   assetUrl?: string;
@@ -20,7 +26,7 @@ export interface ChannelPost {
   voiceAuditNotes?: string[];
   visuals?: VisualAsset;
   scheduledTime?: string;
-  slides?: any[]; // for IG carousel
+  slides?: SlideContent[];
   title?: string;
   metric?: string;
   errorMessage?: string;

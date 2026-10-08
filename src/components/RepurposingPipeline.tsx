@@ -481,7 +481,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
         {activeContext?.tool === 'graphics' && activePost && (
           <SlideGraphicGenerator 
             slides={activePost.slides && activePost.slides.length > 0 
-              ? activePost.slides 
+              ? activePost.slides as any 
               : [{ slideType: 'hook', headlineH1: activePost.title || CHANNEL_CONFIGS[activeContext.channelKey].label, bodyText: activePost.copy }]
             }
             initialTheme={designStyle}
