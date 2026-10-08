@@ -44,6 +44,11 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
   const [copiedChannel, setCopiedChannel] = useState<string | null>(null);
   const [insertedToCalendar, setInsertedToCalendar] = useState(false);
   const [useGridView, setUseGridView] = useState(false);
+  const [activeAngles, setActiveAngles] = useState<string[]>([]);
+  const [designStyle, setDesignStyle] = useState('blueprint_notebook');
+  const [aspectRatio, setAspectRatio] = useState('1:1');
+
+  React.useEffect(() => setActiveAngles([]), [selectedNode.id]);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -175,26 +180,17 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
                 Multi-Channel Repurposing Pipeline
               </h3>
               <p className="text-xs text-zinc-400">
-                Grounds Gemini on your Drive knowledge base to generate 5 brand-aligned channel drafts.
+                Generate 5 brand-aligned social drafts from your knowledge base.
               </p>
             </div>
           </div>
-
-          <button
-            onClick={handleGenerate}
-            disabled={isGenerating}
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-950/40 cursor-pointer disabled:opacity-50 transition"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            {isGenerating ? 'Synthesising 5 Channels...' : 'Generate 5-Channel Bundle'}
-          </button>
         </div>
 
         {/* Dropdown Node Selector to Save Massive Space */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-mono font-medium text-zinc-300">
-              Grounded Knowledge Topic:
+            <span className="text-xs font-mono font-medium text-[#00E5FF]">
+              Step 1: Select Webpage to Repurpose
             </span>
             <button
               onClick={() => setUseGridView(!useGridView)}
@@ -266,7 +262,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
         <div className="bg-zinc-950/90 rounded-xl p-3.5 border border-zinc-800/80 grid grid-cols-1 md:grid-cols-12 gap-3">
           <div className="md:col-span-8 space-y-2">
             <div className="flex items-center gap-2 text-xs">
-              <span className="font-semibold text-slate-200">Canonical Grounding:</span>
+              <span className="font-semibold text-slate-200">Source Link:</span>
               <a
                 href={selectedNode.canonicalUrl}
                 target="_blank"
@@ -277,18 +273,26 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
-            <div className="text-xs text-slate-400 flex flex-wrap gap-1.5 items-center">
-              <span className="text-slate-500 font-mono text-[11px]">Core Entities:</span>
-              {selectedNode.coreEntities.map((ent, i) => (
-                <span
-                  key={i}
-                  className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[11px] font-mono border border-slate-700/60"
-                >
-                  {ent}
-                </span>
-              ))}
+            <div className="text-xs text-slate-400 flex flex-wrap gap-2 items-center pt-1">
+              <span className="text-[#00E5FF] font-mono text-[11px] font-medium block w-full mb-1">Step 2: Select Content Angles (Click to toggle):</span>
+              {selectedNode.coreEntities.map((ent, i) => {
+                const isActive = activeAngles.includes(ent);
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setActiveAngles(prev => isActive ? prev.filter(a => a !== ent) : [...prev, ent])}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono border transition-all cursor-pointer shadow-sm ${
+                      isActive 
+                        ? 'bg-[#00E5FF]/20 text-[#00E5FF] border-[#00E5FF]/50 shadow-[0_0_8px_rgba(0,229,255,0.2)]' 
+                        : 'bg-slate-800/80 text-slate-400 border-slate-700/60 hover:border-slate-500 hover:text-slate-200'
+                    }`}
+                  >
+                    {ent}
+                  </button>
+                );
+              })}
             </div>
-            <div className="text-xs text-slate-300 space-y-1 pt-1">
+            <div className="text-xs text-slate-300 space-y-1 pt-2">
               <span className="text-slate-400 font-semibold block text-[11px]">Key Technical Takeaways:</span>
               <ul className="list-disc list-inside space-y-0.5 text-[11px] text-slate-400 pl-1">
                 {selectedNode.takeaways.slice(0, 2).map((takeaway, i) => (
@@ -298,14 +302,41 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
             </div>
           </div>
 
-          <div className="md:col-span-4 flex flex-col justify-between border-t md:border-t-0 md:border-l border-slate-800 md:pl-4 pt-3 md:pt-0">
+          <div className="md:col-span-4 flex flex-col gap-3 border-t md:border-t-0 md:border-l border-slate-800 md:pl-4 pt-3 md:pt-0">
             <div>
               <span className="text-[10px] text-slate-500 font-mono uppercase block mb-1">
-                Grounded Metric Badge
+                Design Style
               </span>
-              <span className="text-xs font-mono px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 block font-semibold">
-                {selectedNode.suggestedMetric}
+              <select 
+                value={designStyle}
+                onChange={e => setDesignStyle(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-[#00E5FF] cursor-pointer"
+              >
+                <option value="blueprint_notebook">Blueprint Notebook (Yellow)</option>
+                <option value="blue_theme">Blue Theme (Deck 2)</option>
+                <option value="style_a_dark_cinematic">Style A: Dark Cinematic</option>
+                <option value="style_b_charcoal_container">Style B: Muted Charcoal Container</option>
+                <option value="style_c_red_accent">Style C: Before/After Red Accent</option>
+                <option value="style_d_workspace_notes">Style D: Workspace Notes</option>
+                <option value="telemetry">Dark Telemetry</option>
+                <option value="neon_purple">Neon Purple</option>
+                <option value="hot_pink">Hot Pink</option>
+              </select>
+            </div>
+            <div>
+              <span className="text-[10px] text-slate-500 font-mono uppercase block mb-1">
+                Aspect Ratio
               </span>
+              <select 
+                value={aspectRatio}
+                onChange={e => setAspectRatio(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-[#00E5FF] cursor-pointer"
+              >
+                <option value="1:1">Square (1:1)</option>
+                <option value="4:5">Portrait (4:5)</option>
+                <option value="9:16">Story/Reel (9:16)</option>
+                <option value="16:9">Landscape (16:9)</option>
+              </select>
             </div>
 
             <div className="mt-3">
@@ -319,6 +350,18 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Step 3: Generate Action */}
+      <div className="flex justify-center py-2">
+        <button
+          onClick={handleGenerate}
+          disabled={isGenerating}
+          className="w-full md:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#00E5FF] hover:bg-[#00E5FF]/90 text-slate-950 text-sm font-bold shadow-[0_0_20px_rgba(0,229,255,0.3)] cursor-pointer disabled:opacity-50 transition transform hover:scale-[1.02]"
+        >
+          <Sparkles className="w-4 h-4" />
+          {isGenerating ? 'Synthesising 5 Channels...' : 'Step 3: Generate 5-Channel Bundle'}
+        </button>
       </div>
 
       {/* Generation Results View (5 Channels) */}
@@ -598,13 +641,13 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
           )}
         </div>
       ) : (
-        <div className="p-8 text-center bg-slate-900/40 rounded-xl border border-slate-800/80 space-y-2">
-          <Layers className="w-10 h-10 text-slate-600 mx-auto" />
-          <h4 className="text-sm font-semibold text-slate-300">
-            Pipeline Ready to Synthesise
+        <div className="p-10 text-center bg-slate-900/20 rounded-xl border border-slate-800/80 border-dashed space-y-3">
+          <Layers className="w-12 h-12 text-slate-700 mx-auto opacity-50" />
+          <h4 className="text-sm font-semibold text-slate-400">
+            Output Tray
           </h4>
-          <p className="text-xs text-slate-500 max-w-md mx-auto">
-            Click "Generate 5-Channel Bundle" above to run Gemini against "{selectedNode.title}" and produce 5 grounded, platform-optimised outputs.
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            Your drafted social posts will appear here after synthesis.
           </p>
         </div>
       )}

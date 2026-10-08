@@ -785,7 +785,12 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
                 onChange={(e) => setConfig({ ...config, theme: e.target.value as any })}
                 className="bg-zinc-900 border border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-200 font-mono focus:border-[#00E5FF] focus:outline-none cursor-pointer"
               >
-                <option value="blueprint_notebook">Blueprint Notebook (Amber)</option>
+                <option value="blueprint_notebook">Blueprint Notebook (Yellow)</option>
+                <option value="blue_theme">Blue Theme (Deck 2)</option>
+                <option value="style_a_dark_cinematic">Style A: Dark Cinematic</option>
+                <option value="style_b_charcoal_container">Style B: Muted Charcoal Container</option>
+                <option value="style_c_red_accent">Style C: Before/After Red Accent</option>
+                <option value="style_d_workspace_notes">Style D: Workspace Notes</option>
                 <option value="telemetry">Dark Telemetry (Neon Green)</option>
                 <option value="neon_purple">Purple & Cyan (#7B2EFF)</option>
                 <option value="hot_pink">Hot Pink (#FF007A)</option>
