@@ -51,34 +51,26 @@ export const BRAND_LOGO_PRESETS = [
   },
 ];
 
-export const CHARACTER_CUTOUT_PRESETS = [
-  {
-    id: 'ai_bill_suit',
-    name: 'AI Bill (Smug in Navy Suit & Sunglasses)',
-    folderId: '1AOdLv6iBaVdCalem7WJ21uNsfwEO45bn',
-    description: 'Proud/smug pattern-interrupt stopping feed scrolls with humorous contrast against dense technical RAG subjects.',
-    calloutText: 'AI BILL: PROUD & COMPLIANT',
-    suitColor: '#1E293B',
-    tieColor: '#EF4444',
-  },
-  {
-    id: 'ai_bill_compliance',
-    name: 'AI Bill (Lead Compliance Auditor)',
-    folderId: '1AOdLv6iBaVdCalem7WJ21uNsfwEO45bn',
-    description: 'Formal blazer with checklist badge, signaling 100% Australian English and zero marketing buzzwords.',
-    calloutText: 'AUDIT PASSED: ZERO FLUFF',
-    suitColor: '#0E1726',
-    tieColor: '#00E5FF',
-  },
-  {
-    id: 'ai_bill_auditor',
-    name: 'AI Bill (Vector Search Engineer)',
-    folderId: '1AOdLv6iBaVdCalem7WJ21uNsfwEO45bn',
-    description: 'High-entropy engineering persona with neon telemetry shades and terminal badge.',
-    calloutText: 'KV CACHE OPTIMISED',
-    suitColor: '#1A0C38',
-    tieColor: '#00FF85',
-  },
+export interface CharacterPreset {
+  id: string;
+  name: string;
+  folderId?: string;
+  description?: string;
+  calloutText?: string;
+  suitColor?: string;
+  tieColor?: string;
+}
+
+export const CHARACTER_CUTOUT_PRESETS: CharacterPreset[] = [
+  { id: 'plumber-pete', name: 'Plumber Pete' },
+  { id: 'physio-sarah', name: 'Physio Sarah' },
+  { id: 'mono-bot', name: 'Mono Bot' },
+  { id: 'headshot-harriet', name: 'Headshot Harriet' },
+  { id: 'fitness-frank', name: 'Fitness Frank' },
+  { id: 'droid-bot', name: 'Droid Bot' },
+  { id: 'dex-scanner', name: 'Dex Scanner' },
+  { id: 'ai-bill', name: 'Ai Bill' },
+  { id: 'accountant-eric', name: 'Accountant Eric' }
 ];
 
 export const INITIAL_IA_NODES: IANode[] = [

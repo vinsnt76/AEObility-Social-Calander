@@ -88,7 +88,7 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps & { init
     showGrid: true,
     showBadge: true,
     showPatternInterrupt: true,
-    characterType: 'ai_bill_suit',
+    characterType: 'ai-bill',
     logoType: 'delta_triangle',
     highlightKeyword: 'trade business',
     highlightColor: '#F59E0B',

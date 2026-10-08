@@ -4,6 +4,8 @@ import { requestGenerateSocialBundle } from '../services/geminiClient';
 import { PipelineOverlayDrawer } from './PipelineOverlayDrawer';
 import { ChannelTabPanel, ChannelKey, ChannelPost, ActiveContext } from './ChannelTabPanel';
 import { CHANNEL_CONFIGS } from '../config/channelPresets';
+import { CHARACTER_CUTOUT_PRESETS } from '../services/knowledgeBase';
+import { CHARACTER_CUTOUT_PRESETS } from '../services/knowledgeBase';
 import { SlideGraphicGenerator } from './SlideGraphicGenerator';
 import { BrandVoiceGatekeeper } from './BrandVoiceGatekeeper';
 import {
@@ -42,6 +44,8 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
   const [useGridView, setUseGridView] = useState(false);
   const [activeAngles, setActiveAngles] = useState<string[]>([]);
   const [designStyle, setDesignStyle] = useState('blueprint_notebook');
+  const [primaryCharacter, setPrimaryCharacter] = useState('');
+  const [secondaryCharacter, setSecondaryCharacter] = useState('');
   
   React.useEffect(() => setActiveAngles([]), [selectedNode.id]);
 

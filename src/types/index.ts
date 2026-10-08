@@ -123,7 +123,7 @@ export interface SlideTemplateConfig {
   showGrid: boolean;
   showBadge: boolean;
   showPatternInterrupt: boolean; // AI Bill smug visual pattern interrupt
-  characterType?: 'ai_bill_suit' | 'ai_bill_compliance' | 'ai_bill_auditor' | 'custom_character';
+  characterType?: string;
   logoType?: 'delta_triangle' | 'monogram' | 'blueprint_seal' | 'custom_logo';
   customCharacterUrl?: string;
   customLogoUrl?: string;
