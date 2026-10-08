@@ -18,7 +18,21 @@ import {
   Check,
   ShieldCheck,
   ArrowRight,
+  X,
 } from 'lucide-react';
+
+interface ActiveContext {
+  channelKey: 'linkedin' | 'instagram' | 'facebook' | 'youtube' | 'gmb' | null;
+  tool: 'graphics' | 'gatekeeper' | null;
+}
+
+const CHANNEL_GRAPHIC_CONFIG: Record<string, { ratio: string; format: string }> = {
+  instagram: { ratio: '4:5', format: 'carousel' },
+  youtube: { ratio: '16:9', format: 'thumbnail' },
+  linkedin: { ratio: '1:1', format: 'document' },
+  facebook: { ratio: '1:1', format: 'image' },
+  gmb: { ratio: '4:3', format: 'photo' }
+};
 
 interface RepurposingPipelineProps {
   nodes: IANode[];
@@ -46,7 +60,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
   const [useGridView, setUseGridView] = useState(false);
   const [activeAngles, setActiveAngles] = useState<string[]>([]);
   const [designStyle, setDesignStyle] = useState('blueprint_notebook');
-  const [aspectRatio, setAspectRatio] = useState('1:1');
+  const [activeContext, setActiveContext] = useState<ActiveContext>({ channelKey: null, tool: null });
 
   React.useEffect(() => setActiveAngles([]), [selectedNode.id]);
 
@@ -323,21 +337,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
                 <option value="hot_pink">Hot Pink</option>
               </select>
             </div>
-            <div>
-              <span className="text-[10px] text-slate-500 font-mono uppercase block mb-1">
-                Aspect Ratio
-              </span>
-              <select 
-                value={aspectRatio}
-                onChange={e => setAspectRatio(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-[#00E5FF] cursor-pointer"
-              >
-                <option value="1:1">Square (1:1)</option>
-                <option value="4:5">Portrait (4:5)</option>
-                <option value="9:16">Story/Reel (9:16)</option>
-                <option value="16:9">Landscape (16:9)</option>
-              </select>
-            </div>
+            {/* Aspect Ratio dropdown removed in favor of platform-adaptive defaults */}
 
             <div className="mt-3">
               <input
@@ -488,7 +488,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
                       bundle.instagram.title,
                       selectedNode.suggestedMetric,
                       designStyle,
-                      aspectRatio
+                      CHANNEL_GRAPHIC_CONFIG.instagram.ratio
                     )
                   }
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/40 text-xs font-semibold cursor-pointer transition"
