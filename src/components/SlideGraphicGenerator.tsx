@@ -68,10 +68,11 @@ const DEFAULT_SLIDES: CarouselSlide[] = [
   },
 ];
 
-export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps & { initialTheme?: string | null, initialRatio?: string | null }> = ({
+export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps & { initialTheme?: string | null, initialRatio?: string | null, initialCharacterType?: string | null }> = ({
   slides: propSlides,
   initialTheme,
   initialRatio,
+  initialCharacterType,
   onSaveCreativeAsset,
   activeCalendarItem,
 }) => {
@@ -88,7 +89,7 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps & { init
     showGrid: true,
     showBadge: true,
     showPatternInterrupt: true,
-    characterType: 'ai-bill',
+    characterType: initialCharacterType || 'ai-bill',
     logoType: 'delta_triangle',
     highlightKeyword: 'trade business',
     highlightColor: '#F59E0B',

@@ -405,6 +405,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
             }
             initialTheme={designStyle}
             initialRatio={CHANNEL_CONFIGS[activeContext.channelKey].defaultRatio}
+            initialCharacterType={primaryCharacter}
             onSaveCreativeAsset={(url) => handleSaveGraphics(activeContext.channelKey, url)}
           />
         )}
