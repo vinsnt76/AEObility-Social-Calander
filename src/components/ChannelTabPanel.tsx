@@ -69,3 +69,5 @@ export const ChannelTabPanel: React.FC<{
     </div>
   );
 };
+
+export interface ActiveContext { channelKey: ChannelKey; tool: ActiveTool; }

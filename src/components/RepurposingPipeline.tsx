@@ -5,7 +5,6 @@ import { PipelineOverlayDrawer } from './PipelineOverlayDrawer';
 import { ChannelTabPanel, ChannelKey, ChannelPost, ActiveContext } from './ChannelTabPanel';
 import { CHANNEL_CONFIGS } from '../config/channelPresets';
 import { CHARACTER_CUTOUT_PRESETS } from '../services/knowledgeBase';
-import { CHARACTER_CUTOUT_PRESETS } from '../services/knowledgeBase';
 import { SlideGraphicGenerator } from './SlideGraphicGenerator';
 import { BrandVoiceGatekeeper } from './BrandVoiceGatekeeper';
 import {
@@ -36,6 +35,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
+  const [insertedToCalendar, setInsertedToCalendar] = useState(false);
   
   const [bundlePosts, setBundlePosts] = useState<Record<ChannelKey, ChannelPost>>(INITIAL_BUNDLE_STATE);
   const [activeChannelTab, setActiveChannelTab] = useState<ChannelKey>('linkedin');
@@ -412,7 +412,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
         {activeContext?.tool === 'gatekeeper' && activePost && (
           <BrandVoiceGatekeeper 
             initialText={activePost.copy}
-            onApplyEdits={(newCopy, score) => handleApplyVoiceEdits(activeContext.channelKey, newCopy, score)}
+            onApplyFix={(newCopy) => handleApplyVoiceEdits(activeContext.channelKey, newCopy, 100)}
           />
         )}
       </PipelineOverlayDrawer>
