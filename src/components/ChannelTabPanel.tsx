@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type ChannelKey = 'linkedin' | 'instagram' | 'facebook' | 'youtube' | 'googleBusiness';
-export type PostLifecycleStatus = 'empty' | 'generated' | 'edited' | 'ready' | 'dispatched';
+export type PostLifecycleStatus = 'empty' | 'idle' | 'generating' | 'generated' | 'edited' | 'ready' | 'dispatched' | 'failed';
 export type ActiveTool = 'graphics' | 'gatekeeper' | null;
 
 export interface VisualAsset {
@@ -23,14 +23,17 @@ export interface ChannelPost {
   slides?: any[]; // for IG carousel
   title?: string;
   metric?: string;
+  errorMessage?: string;
 }
 
 export const ChannelTabPanel: React.FC<{
   post: ChannelPost;
   onOpenTool: (tool: ActiveTool) => void;
   onUpdateStatus: (status: PostLifecycleStatus) => void;
+  onRetry?: (channel: ChannelKey) => void;
   onSingleDispatch: () => void;
-}> = ({ post, onOpenTool, onSingleDispatch }) => {
+}> = ({ post, onOpenTool,
+  onRetry, onSingleDispatch }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">

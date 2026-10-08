@@ -155,3 +155,76 @@ Inspect the full benchmarks on the AEObility engineering hub.`,
     },
   };
 }
+
+
+export interface ChannelGeneratePayload {
+  node: IANode;
+  promptModifier?: string;
+  theme?: string;
+}
+
+export async function generateLinkedInPost(payload: ChannelGeneratePayload): Promise<any> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const fallback = generateDeterministicFallbackBundle(payload.node);
+      resolve({
+        copy: fallback.linkedIn.body,
+        originalGeneratedCopy: fallback.linkedIn.body,
+        title: fallback.linkedIn.hook
+      });
+    }, 2500);
+  });
+}
+
+export async function generateInstagramCarousel(payload: ChannelGeneratePayload): Promise<any> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const fallback = generateDeterministicFallbackBundle(payload.node);
+      resolve({
+        copy: fallback.instagram.caption,
+        originalGeneratedCopy: fallback.instagram.caption,
+        slides: fallback.instagram.slides,
+        title: fallback.instagram.title
+      });
+    }, 6000);
+  });
+}
+
+export async function generateFacebookPost(payload: ChannelGeneratePayload): Promise<any> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const fallback = generateDeterministicFallbackBundle(payload.node);
+      resolve({
+        copy: fallback.facebook.body,
+        originalGeneratedCopy: fallback.facebook.body,
+        title: fallback.facebook.hook
+      });
+    }, 2200);
+  });
+}
+
+export async function generateYouTubePost(payload: ChannelGeneratePayload): Promise<any> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const fallback = generateDeterministicFallbackBundle(payload.node);
+      resolve({
+        copy: fallback.youtube.script45s,
+        originalGeneratedCopy: fallback.youtube.script45s,
+        title: fallback.youtube.title
+      });
+    }, 3100);
+  });
+}
+
+export async function generateGMBPost(payload: ChannelGeneratePayload): Promise<any> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const fallback = generateDeterministicFallbackBundle(payload.node);
+      resolve({
+        copy: fallback.gmb.summary1500Char,
+        originalGeneratedCopy: fallback.gmb.summary1500Char,
+        title: fallback.gmb.title
+      });
+    }, 1800);
+  });
+}

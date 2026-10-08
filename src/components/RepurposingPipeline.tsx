@@ -1,6 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { IANode, ContentCalendarItem } from '../types';
-import { requestGenerateSocialBundle } from '../services/geminiClient';
+import { 
+  generateLinkedInPost,
+  generateInstagramCarousel,
+  generateFacebookPost,
+  generateYouTubePost,
+  generateGMBPost,
+  ChannelGeneratePayload 
+} from '../services/geminiClient';
 import { PipelineOverlayDrawer } from './PipelineOverlayDrawer';
 import { ChannelTabPanel, ChannelKey, ChannelPost, ActiveContext } from './ChannelTabPanel';
 import { CHANNEL_CONFIGS } from '../config/channelPresets';
@@ -18,6 +25,15 @@ interface RepurposingPipelineProps {
   onSelectNode: (node: IANode) => void;
   onSendToCalendar: (items: ContentCalendarItem[]) => void;
 }
+
+
+const CHANNEL_RUNNERS: Record<ChannelKey, (payload: ChannelGeneratePayload) => Promise<Partial<ChannelPost>>> = {
+  linkedin: generateLinkedInPost,
+  instagram: generateInstagramCarousel,
+  facebook: generateFacebookPost,
+  youtube: generateYouTubePost,
+  googleBusiness: generateGMBPost,
+};
 
 const INITIAL_BUNDLE_STATE: Record<ChannelKey, ChannelPost> = {
   linkedin: { channel: 'linkedin', copy: '', originalGeneratedCopy: '', status: 'empty' },
@@ -49,22 +65,55 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
   
   React.useEffect(() => setActiveAngles([]), [selectedNode.id]);
 
-  const handleGenerate = async () => {
+    const handleParallelGenerate = (channelsToRun: ChannelKey[] = Object.keys(CHANNEL_RUNNERS) as ChannelKey[]) => {
     setIsGenerating(true);
-    try {
-      const generated = await requestGenerateSocialBundle(selectedNode, customPrompt);
-      
-      setBundlePosts({
-        linkedin: { channel: 'linkedin', copy: generated.linkedIn.body, originalGeneratedCopy: generated.linkedIn.body, status: 'generated' },
-        instagram: { channel: 'instagram', copy: generated.instagram.caption, originalGeneratedCopy: generated.instagram.caption, status: 'generated', slides: generated.instagram.slides, title: generated.instagram.title, metric: selectedNode.suggestedMetric },
-        facebook: { channel: 'facebook', copy: generated.facebook.body, originalGeneratedCopy: generated.facebook.body, status: 'generated' },
-        youtube: { channel: 'youtube', copy: generated.youtube.script45s, originalGeneratedCopy: generated.youtube.script45s, status: 'generated' },
-        googleBusiness: { channel: 'googleBusiness', copy: generated.gmb.summary1500Char, originalGeneratedCopy: generated.gmb.summary1500Char, status: 'generated' },
+    setBundlePosts(prev => {
+      const next = { ...prev };
+      channelsToRun.forEach(ch => {
+        next[ch] = { ...next[ch], status: 'generating', errorMessage: undefined };
       });
-    } finally {
-      setIsGenerating(false);
-    }
+      return next;
+    });
+
+    const payload: ChannelGeneratePayload = {
+      node: selectedNode,
+      promptModifier: customPrompt,
+      theme: designStyle,
+    };
+
+    let completed = 0;
+
+    channelsToRun.forEach(channel => {
+      CHANNEL_RUNNERS[channel](payload)
+        .then(result => {
+          setBundlePosts(prev => ({
+            ...prev,
+            [channel]: {
+              ...prev[channel],
+              ...result,
+              status: 'generated',
+            },
+          }));
+        })
+        .catch(err => {
+          setBundlePosts(prev => ({
+            ...prev,
+            [channel]: {
+              ...prev[channel],
+              status: 'failed',
+              errorMessage: err?.message || 'Failed to generate copy',
+            },
+          }));
+        })
+        .finally(() => {
+          completed++;
+          if (completed === channelsToRun.length) {
+            setIsGenerating(false);
+          }
+        });
+    });
   };
+
 
   const handleOpenTool = (channel: ChannelKey, tool: 'graphics' | 'gatekeeper') => {
     setActiveContext({ channelKey: channel, tool });
@@ -119,7 +168,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
       scheduledDate: new Date().toISOString().split('T')[0],
       scheduledTime: '12:00',
       status: 'In Review',
-      gatekeeperScore: post.voiceScore,
+      gatekeeperScore: post.voiceScore || 0,
       gatekeeperIssues: [],
       lastModified: new Date().toISOString()
     }]);
@@ -145,7 +194,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
       scheduledDate: new Date().toISOString().split('T')[0],
       scheduledTime: '12:00',
       status: 'In Review',
-      gatekeeperScore: post.voiceScore,
+      gatekeeperScore: post.voiceScore || 0,
       gatekeeperIssues: [],
       lastModified: new Date().toISOString()
     })));
@@ -370,7 +419,7 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
       {/* Step 3: Generate Action */}
       <div className="flex justify-center py-2">
         <button
-          onClick={handleGenerate}
+          onClick={() => handleParallelGenerate()}
           disabled={isGenerating}
           className="w-full md:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#00E5FF] hover:bg-[#00E5FF]/90 text-slate-950 text-sm font-bold shadow-[0_0_20px_rgba(0,229,255,0.3)] cursor-pointer disabled:opacity-50 transition transform hover:scale-[1.02]"
         >

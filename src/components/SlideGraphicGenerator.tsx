@@ -965,7 +965,7 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps & { init
                         className="text-[10px] font-mono px-1.5 py-0.2 rounded shrink-0 ml-2"
                         style={{ backgroundColor: `${char.tieColor}20`, color: char.tieColor }}
                       >
-                        {char.calloutText.split(':')[0]}
+                        {(char.calloutText || 'AI ASSISTANT').split(':')[0]}
                       </span>
                     </button>
                   ))}

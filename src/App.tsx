@@ -474,8 +474,8 @@ function AppContent() {
             selectedNode={selectedNode}
             onSelectNode={setSelectedNode}
             onSendToCalendar={handleSendToCalendar}
-            onSendToGatekeeper={handleInspectInGatekeeper}
-            onSendToGraphicGenerator={handleSendToGraphicGenerator}
+            
+            
           />
         )}
 
