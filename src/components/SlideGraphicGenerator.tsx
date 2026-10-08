@@ -68,8 +68,10 @@ const DEFAULT_SLIDES: CarouselSlide[] = [
   },
 ];
 
-export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
+export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps & { initialTheme?: string | null, initialRatio?: string | null }> = ({
   slides: propSlides,
+  initialTheme,
+  initialRatio,
   onSaveCreativeAsset,
   activeCalendarItem,
 }) => {
@@ -81,8 +83,8 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
   );
 
   const [config, setConfig] = useState<SlideTemplateConfig>({
-    aspectRatio: '1:1',
-    theme: 'blueprint_notebook',
+    aspectRatio: (initialRatio as any) || '1:1',
+    theme: (initialTheme as any) || 'blueprint_notebook',
     showGrid: true,
     showBadge: true,
     showPatternInterrupt: true,

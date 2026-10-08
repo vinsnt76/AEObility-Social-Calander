@@ -166,6 +166,8 @@ function AppContent() {
   const [activeSlides, setActiveSlides] = useState<CarouselSlide[]>([]);
   const [slideTitle, setSlideTitle] = useState<string>('');
   const [slideMetric, setSlideMetric] = useState<string>('');
+  const [graphicDesignStyle, setGraphicDesignStyle] = useState<string | null>(null);
+  const [graphicAspectRatio, setGraphicAspectRatio] = useState<string | null>(null);
   const [activeCalendarItemForGraphic, setActiveCalendarItemForGraphic] = useState<ContentCalendarItem | null>(null);
 
   // Gatekeeper state
@@ -234,10 +236,12 @@ function AppContent() {
   };
 
   // Pipeline Handler: Send slides to graphic generator
-  const handleSendToGraphicGenerator = (slides: CarouselSlide[], title: string, metric: string) => {
+  const handleSendToGraphicGenerator = (slides: CarouselSlide[], title: string, metric: string, style?: string, ratio?: string) => {
     setActiveSlides(slides);
     setSlideTitle(title);
     setSlideMetric(metric);
+    setGraphicDesignStyle(style || null);
+    setGraphicAspectRatio(ratio || null);
     setActiveCalendarItemForGraphic(null);
     setActiveTab('graphics');
   };
@@ -316,7 +320,7 @@ function AppContent() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
           {/* Official AEObility Wordmark & Streamlined Header */}
-          <BrandLogo interactive={true} />
+          <BrandLogo />
 
           {/* Right Toolbar: Assets Dropdown, Theme/Palette Controls, & Google Workspace Auth */}
           <div className="flex items-center gap-2">
@@ -480,6 +484,8 @@ function AppContent() {
             slides={activeSlides}
             initialTitle={slideTitle}
             initialMetric={slideMetric}
+            initialTheme={graphicDesignStyle}
+            initialRatio={graphicAspectRatio}
             activeCalendarItem={activeCalendarItemForGraphic}
             onSaveCreativeAsset={handleSaveCreativeAssetToItem}
           />

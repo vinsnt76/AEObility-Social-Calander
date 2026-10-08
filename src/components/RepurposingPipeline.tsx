@@ -26,7 +26,7 @@ interface RepurposingPipelineProps {
   onSelectNode: (node: IANode) => void;
   onSendToCalendar: (items: ContentCalendarItem[]) => void;
   onSendToGatekeeper: (text: string, cta: string) => void;
-  onSendToGraphicGenerator: (slides: any[], title: string, metric: string) => void;
+  onSendToGraphicGenerator: (slides: any[], title: string, metric: string, style?: string, ratio?: string) => void;
 }
 
 export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
@@ -486,7 +486,9 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
                     onSendToGraphicGenerator(
                       bundle.instagram.slides,
                       bundle.instagram.title,
-                      selectedNode.suggestedMetric
+                      selectedNode.suggestedMetric,
+                      designStyle,
+                      aspectRatio
                     )
                   }
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/40 text-emerald-300 border border-emerald-500/40 text-xs font-semibold cursor-pointer transition"
