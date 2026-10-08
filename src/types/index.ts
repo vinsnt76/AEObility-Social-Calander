@@ -118,7 +118,7 @@ export interface DriveFolderInfo {
 }
 
 export interface SlideTemplateConfig {
-  aspectRatio: '1:1' | '9:16' | '16:9';
+  aspectRatio: '1:1' | '9:16' | '16:9' | '4:5';
   theme: 'telemetry' | 'blueprint_notebook' | 'neon_purple' | 'hot_pink' | 'light_editorial' | 'amber_steel' | 'blue_theme' | 'style_a_dark_cinematic' | 'style_b_charcoal_container' | 'style_c_red_accent' | 'style_d_workspace_notes';
   showGrid: boolean;
   showBadge: boolean;
