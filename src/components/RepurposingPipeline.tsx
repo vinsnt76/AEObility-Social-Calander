@@ -14,6 +14,7 @@ import { CHANNEL_CONFIGS } from '../config/channelPresets';
 import { CHARACTER_CUTOUT_PRESETS } from '../services/knowledgeBase';
 import { SlideGraphicGenerator } from './SlideGraphicGenerator';
 import { BrandVoiceGatekeeper } from './BrandVoiceGatekeeper';
+import { usePipelineAutosave } from '../hooks/usePipelineAutosave';
 import {
   Sparkles,
   ExternalLink,
@@ -53,7 +54,12 @@ export const RepurposingPipeline: React.FC<RepurposingPipelineProps> = ({
   const [customPrompt, setCustomPrompt] = useState('');
   const [insertedToCalendar, setInsertedToCalendar] = useState(false);
   
-  const [bundlePosts, setBundlePosts] = useState<Record<ChannelKey, ChannelPost>>(INITIAL_BUNDLE_STATE);
+  const {
+    bundlePosts,
+    setBundlePosts,
+    saveStatus,
+    clearCurrentDraft,
+  } = usePipelineAutosave(selectedNode.id, INITIAL_BUNDLE_STATE);
   const [activeChannelTab, setActiveChannelTab] = useState<ChannelKey>('linkedin');
   const [activeContext, setActiveContext] = useState<ActiveContext | null>(null);
   
