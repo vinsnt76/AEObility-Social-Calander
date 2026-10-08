@@ -97,6 +97,17 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const [customLogoImg, setCustomLogoImg] = useState<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    if (config.customLogoUrl) {
+      const img = new Image();
+      img.onload = () => setCustomLogoImg(img);
+      img.src = config.customLogoUrl;
+    } else {
+      setCustomLogoImg(null);
+    }
+  }, [config.customLogoUrl]);
 
   useEffect(() => {
     if (propSlides && propSlides.length > 0) {
@@ -148,6 +159,9 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
     } else if (config.aspectRatio === '16:9') {
       width = 1920;
       height = 1080;
+    } else if (config.aspectRatio === '4:5') {
+      width = 1080;
+      height = 1350;
     }
 
     canvas.width = width;
@@ -291,8 +305,16 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
     } else {
       ctx.fillStyle = '#00FF85';
     }
-    const logoSymbol = config.logoType === 'monogram' ? '⬢' : config.logoType === 'blueprint_seal' ? '◎' : '▲';
-    ctx.fillText(`${logoSymbol} ${config.brandName}`, paddingX, startY);
+    if (config.logoType === 'custom_logo' && customLogoImg) {
+      // Draw uploaded custom logo, scaled to 32px height
+      const scale = 32 / customLogoImg.height;
+      const imgWidth = customLogoImg.width * scale;
+      ctx.drawImage(customLogoImg, paddingX, startY - 24, imgWidth, 32);
+      ctx.fillText(`${config.brandName}`, paddingX + imgWidth + 12, startY);
+    } else {
+      const logoSymbol = config.logoType === 'monogram' ? '⬢' : config.logoType === 'blueprint_seal' ? '◎' : '▲';
+      ctx.fillText(`${logoSymbol} ${config.brandName}`, paddingX, startY);
+    }
 
     // Slide Number Tracker
     const slideIndicator = `CARD 0${currentSlide.slideNumber} / 0${slides.length}`;
@@ -571,7 +593,7 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
     ctx.font = '500 16px "JetBrains Mono", monospace';
     ctx.fillStyle = isBlueprint ? '#64748B' : '#00E5FF';
     ctx.fillText(config.handle, paddingX, footerY + 12);
-  }, [config, currentSlide, slides, activeSlideIndex]);
+  }, [config, currentSlide, slides, activeSlideIndex, customLogoImg]);
 
   useEffect(() => {
     renderSlideToCanvas();
@@ -753,7 +775,7 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
         {/* Right: Template Customisation & Rule Verification */}
         <div className="lg:col-span-5 space-y-3.5">
           {/* Theme Palette Dropdown Selector */}
-          <div className="bg-zinc-950/80 rounded-xl p-3 border border-zinc-800 space-y-2">
+          <div className="bg-zinc-950/80 rounded-xl p-3 border border-zinc-800 space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-xs font-medium text-zinc-300">
                 Visual Theme Palette:
@@ -769,6 +791,22 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
                 <option value="hot_pink">Hot Pink (#FF007A)</option>
                 <option value="light_editorial">Light Editorial (#1E40AF)</option>
                 <option value="amber_steel">Amber & Steel (#374151)</option>
+              </select>
+            </div>
+            
+            <div className="flex items-center justify-between pt-2 border-t border-zinc-800">
+              <label className="text-xs font-medium text-zinc-300">
+                Canvas Ratio:
+              </label>
+              <select
+                value={config.aspectRatio}
+                onChange={(e) => setConfig({ ...config, aspectRatio: e.target.value as any })}
+                className="bg-zinc-900 border border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-200 font-mono focus:border-[#00E5FF] focus:outline-none cursor-pointer"
+              >
+                <option value="1:1">Square (1:1)</option>
+                <option value="4:5">Portrait (4:5)</option>
+                <option value="9:16">Story/Reel (9:16)</option>
+                <option value="16:9">Landscape (16:9)</option>
               </select>
             </div>
           </div>
@@ -852,6 +890,28 @@ export const SlideGraphicGenerator: React.FC<SlideGraphicGeneratorProps> = ({
                     <span className="truncate">{logo.name.split(' ')[1] || logo.name}</span>
                   </button>
                 ))}
+              </div>
+              <div className="pt-2">
+                <label className="flex items-center justify-center w-full gap-2 px-3 py-2 text-xs font-medium border border-dashed rounded-lg cursor-pointer text-slate-400 border-slate-700 bg-slate-900/50 hover:bg-slate-800 hover:text-white hover:border-[#FF007A] transition-colors">
+                  <CloudUpload className="w-4 h-4" />
+                  Upload Custom Logo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          // Basic implementation - saves to state (will need canvas rendering support)
+                          setConfig({ ...config, customLogoUrl: event.target?.result as string, logoType: 'custom_logo' });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                </label>
               </div>
             </div>
 
