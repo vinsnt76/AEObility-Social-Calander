@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-cyan: #00E5FF;
+  --color-cyber-purple: #7B2EFF;
+  --color-cyber-pink: #FF007A;
+  --color-cyber-green: #00FF85;
+  --color-cyber-blue: #1E40AF;
+  --color-cyber-amber: #F59E0B;
+  --color-cyber-red: #EF4444;
+  --color-cyber-steel: #374151;
+}
+
+:root {
+  --cyan: #00E5FF;
+  --purple: #7B2EFF;
+  --pink: #FF007A;
+  --green: #00FF85;
+  --blue: #1E40AF;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --steel: #374151;
+}
+
+:root[data-theme="light"], .light {
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f1f5f9;
+  --border-subtle: #e2e8f0;
+  --border-prominent: #cbd5e1;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+}
+
+:root[data-theme="dark"], .dark {
+  --bg-primary: #000000;
+  --bg-surface: #0a0a0a;
+  --bg-elevated: #121212;
+  --border-subtle: #1c1c1c;
+  --border-prominent: #282828;
+  --text-main: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-primary, #000000);
+    color: var(--text-main, #e2e8f0);
+    min-height: 100vh;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+}
+
+/* Custom scrollbar for telemetry UI */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary, #000000);
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00E5FF;
+}
+
+/* Glow effects with color system tokens */
+.glow-cyan {
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.35);
+}
+.glow-green {
+  box-shadow: 0 0 15px rgba(0, 255, 133, 0.35);
+}
+.glow-pink {
+  box-shadow: 0 0 15px rgba(255, 0, 122, 0.35);
+}
+.glow-purple {
+  box-shadow: 0 0 15px rgba(123, 46, 255, 0.35);
+}

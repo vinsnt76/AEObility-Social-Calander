@@ -1,0 +1,6 @@
+{
+  "name": "AEObility Autonomous Social Engine",
+  "description": "Automated social media engine grounded on Google Drive knowledge bases, orchestrating multi-channel content generation with Gemini and headless Google Sheets content calendar dispatch.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
